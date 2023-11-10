@@ -1,4 +1,4 @@
-## Tests
+https://github.com/Adawntoremember/docs/blob/main/tests/README.md## Tests
 
 It's not strictly necessary to run tests locally while developing. You can
 always open a pull request and rely on the CI service to run tests for you,
