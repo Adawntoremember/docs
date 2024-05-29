@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import cx from 'classnames'
 import { ChevronUpIcon } from '@primer/octicons-react'
+import styles from './ScrollButton.module.scss'
+
+const { transition200, opacity0, opacity100 } = styles
 
 export type ScrollButtonPropsT = {
   className?: string
@@ -13,7 +16,7 @@ export const ScrollButton = ({ className, ariaLabel }: ScrollButtonPropsT) => {
   useEffect(() => {
     // We cannot determine document.documentElement.scrollTop height because we set the height: 100vh and set overflow to auto to keep the header sticky
     // That means window.scrollTop height is always 0
-    // Using IntersectionObserver we can detemine if the h1 header is in view or not. If not, we show the scroll to top button, if so, we hide it
+    // Using IntersectionObserver we can determine if the h1 header is in view or not. If not, we show the scroll to top button, if so, we hide it
     const observer = new IntersectionObserver(
       function (entries) {
         if (entries[0].isIntersecting === false) {
@@ -36,13 +39,11 @@ export const ScrollButton = ({ className, ariaLabel }: ScrollButtonPropsT) => {
   }
 
   return (
-    <div
-      role="tooltip"
-      className={cx(className, 'transition-200', show ? 'opacity-100' : 'opacity-0')}
-    >
+    <div role="tooltip" className={cx(className, transition200, show ? opacity100 : opacity0)}>
       <button
         onClick={onClick}
         className={cx(
+          'ghd-scroll-to-top', // for data tracking, see events.ts
           'tooltipped tooltipped-n tooltipped-no-delay color-bg-accent-emphasis color-fg-on-emphasis circle border-0',
           'd-flex flex-items-center flex-justify-center',
         )}

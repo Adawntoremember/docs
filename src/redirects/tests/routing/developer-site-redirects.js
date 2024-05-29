@@ -1,13 +1,13 @@
-import { jest } from '@jest/globals'
 import path from 'path'
+
+import { beforeAll, describe, expect, test, vi } from 'vitest'
+
 import enterpriseServerReleases from '#src/versions/lib/enterprise-server-releases.js'
 import { get } from '#src/tests/helpers/e2etest.js'
 import readJsonFile from '#src/frame/lib/read-json-file.js'
 
-jest.useFakeTimers({ legacyFakeTimers: true })
-
 describe('developer redirects', () => {
-  jest.setTimeout(10 * 60 * 1000)
+  vi.setConfig({ testTimeout: 60 * 1000 })
 
   beforeAll(async () => {
     // The first page load takes a long time so let's get it out of the way in
@@ -71,14 +71,14 @@ describe('developer redirects', () => {
     expect(res.headers.location).toBe(expectedFinalPath)
 
     // REST subresources like activity notifications don't have their own page
-    // any more, so redirect to an anchor on the resource page
+    // anymore, so redirect to an anchor on the resource page
     res = await get('/en/v3/activity')
     expect(res.statusCode).toBe(301)
     expectedFinalPath = '/en/rest/activity'
     expect(res.headers.location).toBe(expectedFinalPath)
 
     // REST subresources like activity notifications don't have their own page
-    // any more, so redirect to an anchor on the resource page
+    // anymore, so redirect to an anchor on the resource page
     res = await get('/en/v3/activity/notifications')
     expect(res.statusCode).toBe(301)
     expectedFinalPath = '/en/rest/activity/notifications'

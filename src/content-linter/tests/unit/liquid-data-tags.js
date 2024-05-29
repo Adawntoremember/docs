@@ -1,5 +1,7 @@
 import path from 'path'
 
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+
 import { runRule } from '../../lib/init-test.js'
 import {
   liquidDataReferencesDefined,
@@ -23,8 +25,8 @@ describe(liquidDataReferencesDefined.names.join(' - '), () => {
       '{% data variables.no-file %}',
       // Variables even when they exist can't be nested
       '{% data variables.location.foo.bar %}',
-      '{% data resuables.gated-features.empty %}',
-      '{% data resuables.no-file %}',
+      '{% data reusables.gated-features.empty %}',
+      '{% data reusables.no-file %}',
       '{% data ui.not-there %}',
       '{% data ui.nested.nested.not-there %}',
       '{% data some.random.path %}',

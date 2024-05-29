@@ -17,7 +17,7 @@ router.use('/pageinfo', pageInfo)
 // The purpose of this is for convenience to everyone who runs this code
 // base locally but don't have an Elasticsearch server locally.
 // In production, this env var is always set but perhaps in a writer's
-// local laptop, they don't have an Elasitsearch. Neither a running local
+// local laptop, they don't have an Elasticsearch. Neither a running local
 // server or the known credentials to a remote Elasticsearch. Whenever
 // that's the case, they can just HTTP proxy to the production server.
 if (process.env.ELASTICSEARCH_URL) {
@@ -28,17 +28,9 @@ if (process.env.ELASTICSEARCH_URL) {
     createProxyMiddleware({
       target: 'https://docs.github.com',
       changeOrigin: true,
-      // By default, http-proxy-middleware will `this.logger.info(...)`
-      // to say the following:
-      //
-      //    [HPM] Proxy created: /  -> https://docs.github.com
-      //
-      // This can be misleading and confusing for anybody starting the
-      // server. Besides, in a sense we aren't particularly interested
-      // in this proxy from a developer point of view. If you don't
-      // have your own ELASTICSEARCH_URL locally, then search functionality
-      // isn't what you're developing/debugging.
-      logLevel: 'warn',
+      pathRewrite: function (path, req) {
+        return req.originalUrl
+      },
     }),
   )
 }

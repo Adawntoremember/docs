@@ -8,9 +8,10 @@ import getMiniTocItems from '#src/frame/lib/get-mini-toc-items.js'
 import { pathLanguagePrefixed } from '#src/languages/lib/languages.js'
 import statsd from '#src/observability/lib/statsd.js'
 import { allVersions } from '#src/versions/lib/all-versions.js'
-import { isConnectionDropped } from './halt-on-dropped-connection.js'
+import { isConnectionDropped } from './halt-on-dropped-connection'
 import { nextHandleRequest } from './next.js'
 import { defaultCacheControl } from './cache-control.js'
+import { minimumNotFoundHtml } from '../lib/constants.js'
 
 const STATSD_KEY_RENDER = 'middleware.render_page'
 const STATSD_KEY_404 = 'middleware.render_404'
@@ -59,7 +60,7 @@ export default async function renderPage(req, res) {
 
     if (!pathLanguagePrefixed(req.path)) {
       defaultCacheControl(res)
-      return res.status(404).type('text').send('Not found')
+      return res.status(404).type('html').send(minimumNotFoundHtml)
     }
 
     // The rest is "unhandled" requests where we don't have the page
@@ -75,14 +76,14 @@ export default async function renderPage(req, res) {
     // This means, we allow the CDN to cache it, but to be purged at the
     // next deploy. The length isn't very important as long as it gets
     // a new chance after the next deploy + purge.
-    // This way, we only have to repond with this 404 once per deploy
+    // This way, we only have to respond with this 404 once per deploy
     // and the CDN can cache it.
     defaultCacheControl(res)
 
     // The reason we're *NOT* using `nextApp.render404` is because, in
     // Next v13, is for two reasons:
     //
-    //  1. You can not control the `cache-control` header. It always
+    //  1. You cannot control the `cache-control` header. It always
     //     gets set to `private, no-cache, no-store, max-age=0, must-revalidate`.
     //     which is causing problems with Fastly because then we can't
     //     let Fastly cache it till the next purge, even if we do set a

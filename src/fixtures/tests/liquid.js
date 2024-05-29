@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest'
+
 import { getDataByLanguage } from '#src/data-directory/lib/get-data.js'
 import { getDOM } from '#src/tests/helpers/e2etest.js'
 import { supported } from '#src/versions/lib/enterprise-server-releases.js'
@@ -193,7 +195,7 @@ describe('ifversion', () => {
         return matchesPerVersion[version].includes(condition)
       })
 
-      // this is the inverse of the above, conditions that shoudn't match for this rendered version
+      // this is the inverse of the above, conditions that shouldn't match for this rendered version
       const unwantedConditions = allConditions.filter((condition) => {
         return !matchesPerVersion[version].includes(condition)
       })

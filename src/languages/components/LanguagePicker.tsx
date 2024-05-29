@@ -33,7 +33,7 @@ export const LanguagePicker = ({ xs, mediumOrLower }: Props) => {
   const selectedLang = languages[locale]
 
   // The `router.asPath` will always be without a hash in SSR
-  // So to avoid a hydraration failure on the client, we have to
+  // So to avoid a hydration failure on the client, we have to
   // normalize it to be without the hash. That way the path is treated
   // in a "denormalized" way.
   const routerPath = router.asPath.split('#')[0]
@@ -98,7 +98,10 @@ export const LanguagePicker = ({ xs, mediumOrLower }: Props) => {
         </>
       ) : mediumOrLower ? (
         <ActionList className="hide-sm" selectionVariant="single">
-          <ActionList.Group title={t('language_picker_label')}>{languageList}</ActionList.Group>
+          <ActionList.Group>
+            <ActionList.GroupHeading>{t('language_picker_label')}</ActionList.GroupHeading>
+            {languageList}
+          </ActionList.Group>
         </ActionList>
       ) : (
         <ActionMenu>
